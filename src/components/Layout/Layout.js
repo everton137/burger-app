@@ -1,15 +1,42 @@
-import React from 'react';
-
+import React, { Component } from 'react';
 import Aux from '../../hoc/Aux';
-import classes from './Layout.css';
+import Toolbar from '../Navigation/Toolbar/Toolbar';
+import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
-const layout = ( props ) => (
-  <Aux>
-    <div>Toolbar, SideDrawer, Backdrop</div>
-    <main className={classes.Content}>
-      {props.children}
-    </main>
-  </Aux>
-);
+import './Layout.css';
 
-export default layout;
+class Layout extends Component {
+  state = {
+    showSideDrawer: false
+  }
+
+  // in the ES6 method bellow, this will refer to the class Layout
+  sideDrawerClosedHandler = () => {
+    this.setState({showSideDrawer: false})
+  }
+
+  sideDrawerToggleHandler = () => {
+  // the method bellow doesn't work
+  //    this.setState({showSideDrawer: !this.state.showSideDrawer})
+    this.setState((prevState) => {
+      return {showSideDrawer: !prevState.showSideDrawer};
+    }); 
+  }
+
+  render () {
+    return (
+      <Aux>
+        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
+        <SideDrawer 
+          open={this.state.showSideDrawer} 
+          closed={this.sideDrawerClosedHandler} />
+        <main className="Content">
+          {this.props.children}
+        </main>
+      </Aux>
+    )
+  }
+}
+
+
+export default Layout;
